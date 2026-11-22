@@ -87,13 +87,13 @@ Para iniciar a depuração utilizámos **F5**. Para avançar instrução a instr
 
 Antes de executar a instrução, encontrámos o valor de `health` correspondente a **100** em decimal, ou **`0x64`** em hexadecimal.
 
-![Visualização da memória antes da alteração](image-3.png)
+![Visualização da memória antes da alteração](images/image-3.png)
 
 ### 3.3. Memória depois da alteração
 
 Ao avançar com **F10** e executar a instrução, observámos o valor passar para **999** em decimal, equivalente a **`0x3E7`** em hexadecimal.
 
-![Visualização da memória depois da alteração](image-4.png)
+![Visualização da memória depois da alteração](images/image-4.png)
 
 **Interpretação:** O operador `*` permite aceder ao conteúdo do endereço guardado pelo ponteiro. Quando escrevemos `*healthPtr = 999`, modificamos a variável original, sem alterar o endereço para o qual o ponteiro aponta.
 
