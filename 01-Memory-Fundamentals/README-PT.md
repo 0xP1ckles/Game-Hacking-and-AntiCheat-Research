@@ -1,13 +1,14 @@
 # DIA 1 - Cheating LAB
 
-> **Estado:** Em progresso  
-> **Ambiente:** C++ · Visual Studio · Windows x64
+> **Estado:** Concluído  
+> **Ambiente:** C++ · Visual Studio Community · Windows 11 Pro x64 (VM) · Debug x64
 
 ## Objetivos do dia
 
 - Entender os fundamentos de C/C++ aplicados a jogos.
 - Compreender variáveis, ponteiros e endereços de memória.
 - Observar a leitura e a alteração de valores com o debugger.
+- Explorar a organização de uma `struct` e os respetivos offsets.
 
 ---
 
@@ -77,7 +78,7 @@ int main() {
 
 Colocámos um breakpoint antes da instrução `*healthPtr = 999;` para observar o conteúdo da memória antes e depois da alteração.
 
-Para iniciar a depuração utilizámos **F5**. Para avançar instrução a instrução utilizámos **F10** (*Step Over*). A janela de memória permitiu inspecionar os bytes no endereço observado.
+Para iniciar a depuração, utilizámos **F5**. Para avançar instrução a instrução, utilizámos **F10** (*Step Over*). A janela de memória permitiu inspecionar os bytes no endereço observado.
 
 ### 3.1. Breakpoint antes da alteração
 
@@ -99,10 +100,11 @@ Ao avançar com **F10** e executar a instrução, observámos o valor passar par
 
 ---
 
-## 4. Terceiro Teste - struct do Player
+## 4. Terceiro teste - Estrutura `Player`
+
+### Código utilizado
 
 ```cpp
-
 #include <iostream>
 #include <cstddef>
 
@@ -157,23 +159,26 @@ int main() {
     return 0;
 }
 ```
-### Estrutura de um Player
+
+> **Nota:** O ficheiro [`LAB.cpp`](LAB.cpp) contém esta versão final do terceiro teste. Os códigos dos dois primeiros testes encontram-se documentados nas secções anteriores.
+
+### 4.1. Estrutura de um `Player`
 
 Uma `struct` em C++ permite agrupar várias variáveis relacionadas dentro de um único tipo de dados.
 
 Neste laboratório, criámos uma estrutura `Player` com três atributos:
 
-- `health` - vida do jogador (`int`).
-- `ammo` - munição do jogador (`int`).
-- `speed` - velocidade do jogador (`float`).
+- `health` — vida do jogador (`int`).
+- `ammo` — munição do jogador (`int`).
+- `speed` — velocidade do jogador (`float`).
 
-Cada atributo ocupa espaço em memória. No nosso ambiente Windows x64, estes três tipos ocupam normalmente 4 bytes cada.
+Cada atributo ocupa espaço em memória. No nosso ambiente Windows x64, `int` e `float` ocupam 4 bytes cada.
 
-### Organização da memória e offsets
+### 4.2. Organização da memória e offsets
 
-Um **offset** representa a distância, em bytes, entre um endereço de referência e outro endereço.
+Um **offset** representa a distância, em bytes, entre um endereço de referência e outro endereço. Numa estrutura, utilizamos o endereço inicial da estrutura como referência.
 
-No exemplo observado, os atributos encontram-se em endereços consecutivos, separados por 4 bytes:
+No exemplo observado, os atributos encontram-se em posições separadas por 4 bytes:
 
 | Atributo | Tipo | Tamanho | Offset |
 |---|---|---|---|
@@ -187,29 +192,29 @@ Assim, considerando o endereço inicial da estrutura como `0x1000`, teríamos:
 - `ammo` → `0x1004`
 - `speed` → `0x1008`
 
-Esta disposição corresponde à estrutura utilizada neste laboratório, mas outras estruturas podem conter espaços de preenchimento (*padding*) devido a requisitos de alinhamento de memória.
+Nesta compilação, `sizeof(Player)` devolveu **12 bytes**. Esta disposição corresponde à estrutura utilizada neste laboratório, mas outras estruturas podem conter espaços de preenchimento (*padding*) devido a requisitos de alinhamento de memória.
 
-### Observação no debugger
+### 4.3. Observação no debugger
 
-Com o Visual Studio, podemos observar os endereços dos três atributos e identificar os respetivos valores na janela de memória.
+Com o Visual Studio, observámos os endereços dos três atributos e inspecionámos os respetivos valores na janela de memória.
 
-A alteração de `player.health` de `100` para `999` modifica os bytes correspondentes à vida do jogador, sem necessariamente alterar os restantes atributos.
+Neste **terceiro teste**, a instrução `player.health = 999;` modifica o atributo **diretamente**, sem recorrer a um ponteiro explícito. Isto é diferente do **segundo teste**, no qual utilizámos `*healthPtr = 999;` para modificar a variável através de um ponteiro.
 
-Este teste demonstra como diferentes valores de um objeto podem ser localizados a partir de um endereço base e dos respetivos offsets.
-Um offset é a distância, em bytes, entre um endereço de referência e outro endereço.
-
-Por exemplo, se health estiver em 0x1000, ammo poderá estar em 0x1004 e speed em 0x1008.
+A alteração de `player.health` de `100` para `999` modificou o valor da vida do jogador, enquanto `ammo` permaneceu em `30` e `speed` em `5.0`. Os offsets permaneceram iguais.
 
 ![Código C++ e execução do laboratório de memória](images/image-10.png)
-![Resultados dos testes com variáveis e ponteiros](images/image-5.png)
+
+![Resultados do laboratório com a estrutura Player](images/image-5.png)
 
 ![Estrutura Player: valores iniciais, endereços de memória e offsets](images/image-11.png)
-![Alteração de Health de 100 para 999 e análise no debugger](images/image-8.png)
 
+![Alteração direta de Health de 100 para 999 e análise no debugger](images/image-8.png)
 
-## 4. Conceitos teóricos
+---
 
-### 4.1. Variáveis e memória
+## 5. Conceitos teóricos
+
+### 5.1. Variáveis e memória
 
 Uma variável é um espaço de armazenamento associado a um tipo de dados e a um valor.
 
@@ -217,13 +222,13 @@ Uma variável é um espaço de armazenamento associado a um tipo de dados e a um
 int health = 100;
 ```
 
-- `int` - tipo de dados (normalmente 4 bytes).
-- `health` - nome da variável.
-- `100` - valor inicial.
+- `int` — tipo de dados (4 bytes no ambiente utilizado).
+- `health` — nome da variável.
+- `100` — valor inicial.
 
 Durante a execução, o valor pode estar armazenado na memória física, sendo acedido através do espaço de endereçamento virtual do processo.
 
-### 4.2. Endereços de memória
+### 5.2. Endereços de memória
 
 Cada byte de memória endereçável tem um endereço. O operador `&` permite obter o endereço de uma variável.
 
@@ -235,7 +240,7 @@ O endereço é normalmente apresentado em hexadecimal, com os caracteres `0–9`
 
 Os endereços podem variar entre execuções devido à organização da memória do processo e a mecanismos de segurança como o **ASLR** (*Address Space Layout Randomization*).
 
-### 4.3. Ponteiros (*Pointers*)
+### 5.3. Ponteiros (*Pointers*)
 
 Um ponteiro é uma variável que armazena um endereço de memória.
 
@@ -243,13 +248,13 @@ Um ponteiro é uma variável que armazena um endereço de memória.
 int* healthPtr = &health;
 ```
 
-- `int*` - declara um ponteiro para um inteiro.
-- `healthPtr` - nome do ponteiro.
-- `&health` - obtém o endereço da variável `health`.
+- `int*` — declara um ponteiro para um inteiro.
+- `healthPtr` — nome do ponteiro.
+- `&health` — obtém o endereço da variável `health`.
 
 O ponteiro não contém uma cópia do valor de `health`; contém o endereço onde esse valor está armazenado.
 
-### 4.4. Desreferenciação (*Dereferencing*)
+### 5.4. Desreferenciação (*Dereferencing*)
 
 O operador `*`, aplicado a um ponteiro numa expressão, permite aceder ao valor armazenado no endereço apontado.
 
@@ -269,32 +274,37 @@ Neste caso, o valor de `health` passa de `100` para `999`.
 
 **Importante:** Alterar o conteúdo de uma variável através de um ponteiro não significa alterar o endereço da variável.
 
-### 4.5. Resumo dos operadores
+### 5.5. Resumo dos operadores
 
 | Expressão | Significado |
-| --- | --- |
+|---|---|
 | `health` | Valor da variável |
 | `&health` | Endereço da variável |
 | `healthPtr` | Endereço guardado no ponteiro |
 | `*healthPtr` | Valor no endereço apontado |
 | `*healthPtr = 999` | Escrita no endereço apontado |
 
-## 5. Relação com Game Hacking
+---
+
+## 6. Relação com Game Hacking
 
 Os jogos utilizam memória para armazenar dados como vida, munição, coordenadas e estados dos objetos.
 
-Compreender ponteiros e endereços é essencial para estudar como esses dados são organizados e manipulados.
+Compreender ponteiros, estruturas e endereços é essencial para estudar como esses dados são organizados e manipulados.
 
-Neste laboratório, modificámos a memória do nosso próprio programa. Futuramente, estudaremos como os debuggers e as ferramentas de análise de memória observam os processos.
+Neste laboratório, modificámos a memória do nosso próprio programa. Futuramente, estudaremos como os debuggers e as ferramentas de análise de memória observam os processos em ambientes controlados e autorizados.
 
-## 6. Resultados obtidos até agora
+## 7. Resultados obtidos
 
 - Compilámos um programa C++ em Windows x64.
 - Obtivemos o endereço de uma variável.
 - Criámos um ponteiro para essa variável.
 - Lemos o valor através do ponteiro.
-- Alterámos o valor de `100` para `999`.
-- Observámos os valores antes e depois da alteração no debugger.
-- Observámos endereços diferentes entre duas execuções.
+- Alterámos o valor de `100` para `999` através de um ponteiro no segundo teste.
+- Criámos uma estrutura `Player` com vida, munição e velocidade.
+- Identificámos os offsets `0`, `4` e `8`, bem como o tamanho total de `12` bytes nesta compilação.
+- Alterámos diretamente `player.health` de `100` para `999` no terceiro teste.
+- Observámos os valores antes e depois das alterações no debugger.
+- Observámos endereços absolutos diferentes entre execuções, mantendo os offsets da estrutura.
 
-**Aprendizagem até agora:** Um ponteiro permite aceder indiretamente a uma variável através do seu endereço de memória. Esta é uma das bases para compreender a manipulação de memória e a engenharia inversa.
+**Aprendizagem principal:** Um ponteiro permite aceder indiretamente a uma variável através do seu endereço de memória. Os offsets permitem localizar membros de uma estrutura relativamente ao seu endereço inicial. Estes conceitos são fundamentais para compreender a análise de memória e a engenharia inversa.
