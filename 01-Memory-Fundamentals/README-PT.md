@@ -35,7 +35,7 @@ int main() {
 }
 ```
 
-![Leitura inicial: valor da variável, endereço e ponteiro](images/image.png)
+![Leitura inicial: valor da variável, endereço e ponteiro](Game-Hacking-and-AntiCheat-Research/01-Memory-Fundamentals/images/image.png)
 
 **Observação:** O endereço apresentado por `&health` coincide com o endereço guardado em `healthPtr`. O acesso por `*healthPtr` devolve o valor `100`.
 
