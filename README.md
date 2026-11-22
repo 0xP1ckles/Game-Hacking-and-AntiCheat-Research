@@ -109,6 +109,8 @@ documentação técnica.
 
 **Estado:** ✅ Concluído
 
+[📖 Lab 01 — Documentação em Português](01-Memory-Fundamentals/README-PT.md)
+
 ### Conceitos Abordados
 
 - Variáveis e tipos de dados em C++
