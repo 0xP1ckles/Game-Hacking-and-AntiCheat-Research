@@ -298,7 +298,3 @@ Neste laboratório, modificámos a memória do nosso próprio programa. Futurame
 - Observámos endereços diferentes entre duas execuções.
 
 **Aprendizagem até agora:** Um ponteiro permite aceder indiretamente a uma variável através do seu endereço de memória. Esta é uma das bases para compreender a manipulação de memória e a engenharia inversa.
-
----
-
-*Laboratório em progresso — continuar a documentar os próximos testes abaixo desta secção.*
