@@ -38,6 +38,7 @@ documentation.
 ## Lab 01 — Memory Fundamentals
 
 **Status:** ✅ Completed
+[📖 Lab 01 — English Documentation](01-Memory-Fundamentals/README-ENG.md)
 
 ### Topics Covered
 
