@@ -35,7 +35,7 @@ int main() {
 }
 ```
 
-![Leitura inicial: valor da variável, endereço e ponteiro](Game-Hacking-and-AntiCheat-Research/01-Memory-Fundamentals/images/image.png)
+![Leitura inicial: valor da variável, endereço e ponteiro](images/image.png)
 
 **Observação:** O endereço apresentado por `&health` coincide com o endereço guardado em `healthPtr`. O acesso por `*healthPtr` devolve o valor `100`.
 
@@ -200,11 +200,11 @@ Um offset é a distância, em bytes, entre um endereço de referência e outro e
 
 Por exemplo, se health estiver em 0x1000, ammo poderá estar em 0x1004 e speed em 0x1008.
 
-![alt text](images/image-10.png)
-![alt text](images/image-5.png)
+![Código C++ e execução do laboratório de memória](images/image-10.png)
+![Resultados dos testes com variáveis e ponteiros](images/image-5.png)
 
-![alt text](images/image-11.png)
-![alt text](images/image-8.png)
+![Estrutura Player: valores iniciais, endereços de memória e offsets](images/image-11.png)
+![Alteração de Health de 100 para 999 e análise no debugger](images/image-8.png)
 
 
 ## 4. Conceitos teóricos
